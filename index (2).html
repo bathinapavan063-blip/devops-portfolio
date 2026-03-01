@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS DevOps Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #161d2e;
+    --border: #1f2d45;
+    --accent: #f97316;
+    --accent2: #38bdf8;
+    --green: #22c55e;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,14,26,0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+  }
+
+  .logo {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -1px;
+  }
+  .logo span { color: var(--accent2); }
+
+  nav { display: flex; gap: 32px; align-items: center; }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--accent2); }
+
+  /* ---- HERO ---- */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 80px 40px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(249,115,22,0.1);
+    border: 1px solid rgba(249,115,22,0.3);
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+  .hero h1 .line2 { color: var(--accent2); }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ---- MAIN LAYOUT ---- */
+  .main {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* ---- SECTION HEADER ---- */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+  .section-title span { color: var(--accent2); }
+
+  /* ---- ADD PROJECT FORM ---- */
+  .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 2px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .add-btn:hover { background: #fb923c; transform: translateY(-1px); }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 40px 16px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px;
+    width: 90%;
+    max-width: 560px;
+    animation: fadeUp 0.3s ease both;
+    margin: auto;
+    max-height: none;
+  }
+  .modal h2 {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+  }
+  .modal h2 span { color: var(--accent); }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--accent2); }
+  .form-group select option { background: var(--surface); }
+
+  .tag-input-wrap {
+    display: flex; gap: 8px;
+  }
+  .tag-input-wrap input { flex: 1; }
+  .tag-add-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    padding: 0 16px;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+  .tag-add-btn:hover { border-color: var(--accent2); }
+
+  .tags-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56,189,248,0.1);
+    border: 1px solid rgba(56,189,248,0.2);
+    color: var(--accent2);
+    font-size: 0.65rem;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+  .tag-pill .rm {
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .tag-pill .rm:hover { color: #ef4444; }
+
+  .form-actions { display: flex; gap: 12px; margin-top: 24px; }
+  .btn-save {
+    flex: 1;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .btn-save:hover { background: #fb923c; }
+  .btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 12px 24px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .btn-cancel:hover { border-color: var(--muted); }
+
+  /* ---- FILTER BAR ---- */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    align-items: center;
+  }
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(56,189,248,0.05);
+  }
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 7px 14px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--accent2); }
+  .search-input::placeholder { color: var(--muted); }
+
+  /* ---- PROJECT GRID ---- */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    animation: fadeUp 0.4s ease both;
+    cursor: pointer;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover {
+    border-color: rgba(56,189,248,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .project-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 4px;
+    background: rgba(249,115,22,0.1);
+    border: 1px solid rgba(249,115,22,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+  .status-badge {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+  .status-completed { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+  .status-in-progress { background: rgba(249,115,22,0.1); color: var(--accent); border: 1px solid rgba(249,115,22,0.2); }
+  .status-planned { background: rgba(100,116,139,0.1); color: var(--muted); border: 1px solid rgba(100,116,139,0.2); }
+
+  .card-title {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .card-tag {
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.15);
+    color: var(--accent2);
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .card-date {
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
+  .card-actions { display: flex; gap: 8px; }
+  .card-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .card-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+  .card-btn.delete:hover { border-color: #ef4444; color: #ef4444; }
+
+  /* ---- EMPTY STATE ---- */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+  }
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    opacity: 0.3;
+  }
+  .empty-state h3 {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--text);
+    opacity: 0.5;
+  }
+  .empty-state p { font-size: 0.75rem; line-height: 1.7; }
+
+  /* ---- LEARNING SECTION ---- */
+  .learning-section {
+    margin-top: 60px;
+  }
+  .progress-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .progress-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+  }
+  .progress-label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .progress-title {
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .progress-bar-wrap {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+  .progress-pct {
+    font-size: 0.65rem;
+    color: var(--accent2);
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  footer span { color: var(--accent); }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Detail Modal */
+  .detail-content { }
+  .detail-section { margin-bottom: 20px; }
+  .detail-label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .detail-value {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .detail-link {
+    color: var(--accent2);
+    word-break: break-all;
+    text-decoration: none;
+  }
+  .detail-link:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    .hero { padding: 40px 20px 30px; }
+    .main { padding: 0 20px 60px; }
+    .hero-stats { gap: 24px; }
+    nav { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">AWS<span>DevOps</span>.me</div>
+  <nav>
+    <a href="#projects">Projects</a>
+    <a href="#learning">Learning</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Learning AWS DevOps</div>
+  <h1>
+    My DevOps<br>
+    <span class="line2">Project Vault</span>
+  </h1>
+  <p>A personal space to track, document, and revisit all my AWS & DevOps projects — from CI/CD pipelines to Kubernetes deployments. Built to learn, built to last.</p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num" id="total-count">0</div>
+      <div class="stat-label">Total Projects</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="done-count">0</div>
+      <div class="stat-label">Completed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="wip-count">0</div>
+      <div class="stat-label">In Progress</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main" id="projects">
+
+  <!-- Section Header -->
+  <div class="section-header">
+    <div class="section-title">My <span>Projects</span></div>
+    <button class="add-btn" onclick="openModal()">+ Add Project</button>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <input type="text" class="search-input" placeholder="Search projects..." oninput="filterProjects()" id="search-input">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Completed', this)">Completed</button>
+    <button class="filter-btn" onclick="setFilter('In Progress', this)">In Progress</button>
+    <button class="filter-btn" onclick="setFilter('Planned', this)">Planned</button>
+  </div>
+
+  <!-- Projects Grid -->
+  <div class="projects-grid" id="projects-grid"></div>
+
+  <!-- Learning Section -->
+  <div class="learning-section" id="learning">
+    <div class="section-header">
+      <div class="section-title">Learning <span>Progress</span></div>
+    </div>
+    <div class="progress-cards">
+      <div class="progress-card">
+        <div class="progress-label">Module</div>
+        <div class="progress-title">AWS Core Services</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width: 80%"></div></div>
+        <div class="progress-pct">80%</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-label">Module</div>
+        <div class="progress-title">CI/CD Pipelines</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width: 60%"></div></div>
+        <div class="progress-pct">60%</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-label">Module</div>
+        <div class="progress-title">Docker & Kubernetes</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width: 45%"></div></div>
+        <div class="progress-pct">45%</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-label">Module</div>
+        <div class="progress-title">Terraform / IaC</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width: 30%"></div></div>
+        <div class="progress-pct">30%</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-label">Module</div>
+        <div class="progress-title">Monitoring & Logging</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width: 20%"></div></div>
+        <div class="progress-pct">20%</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Built with 💛 &nbsp;|&nbsp; <span>AWS DevOps Journey</span> &nbsp;|&nbsp; Keep Building
+</footer>
+
+<!-- ADD / EDIT PROJECT MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2>Add <span>Project</span></h2>
+    <div class="form-group">
+      <label>Project Title *</label>
+      <input type="text" id="f-title" placeholder="e.g. EC2 Auto-Scaling Setup">
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="f-desc" rows="3" placeholder="What did you build? What did you learn?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <select id="f-category">
+        <option value="EC2 / Compute">EC2 / Compute</option>
+        <option value="S3 / Storage">S3 / Storage</option>
+        <option value="CI/CD">CI/CD</option>
+        <option value="Docker / K8s">Docker / K8s</option>
+        <option value="Networking / VPC">Networking / VPC</option>
+        <option value="IAM / Security">IAM / Security</option>
+        <option value="Terraform / IaC">Terraform / IaC</option>
+        <option value="Monitoring">Monitoring</option>
+        <option value="Lambda / Serverless">Lambda / Serverless</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select id="f-status">
+        <option value="Completed">Completed</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Planned">Planned</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>GitHub / Project Link</label>
+      <input type="text" id="f-link" placeholder="https://github.com/yourname/project">
+    </div>
+    <div class="form-group">
+      <label>Notes / Key Learnings</label>
+      <textarea id="f-notes" rows="3" placeholder="Issues faced, commands used, key learnings..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Tags (AWS services used)</label>
+      <div class="tag-input-wrap">
+        <input type="text" id="f-tag-input" placeholder="e.g. EC2, S3, CodePipeline" onkeydown="if(event.key==='Enter'){addTag();event.preventDefault()}">
+        <button class="tag-add-btn" onclick="addTag()">+</button>
+      </div>
+      <div class="tags-preview" id="tags-preview"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-save" onclick="saveProject()">Save Project</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <h2 id="d-title">Project <span>Details</span></h2>
+    <div class="detail-content" id="detail-content"></div>
+    <div class="form-actions" style="margin-top:20px">
+      <button class="btn-cancel" style="width:100%" onclick="closeDetail()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CATEGORY_ICONS = {
+    'EC2 / Compute': '🖥️',
+    'S3 / Storage': '🪣',
+    'CI/CD': '🔄',
+    'Docker / K8s': '🐳',
+    'Networking / VPC': '🌐',
+    'IAM / Security': '🔒',
+    'Terraform / IaC': '🏗️',
+    'Monitoring': '📊',
+    'Lambda / Serverless': '⚡',
+    'Other': '📦',
+  };
+
+  let projects = JSON.parse(localStorage.getItem('devops-projects') || '[]');
+  let currentTags = [];
+  let currentFilter = 'all';
+
+  // Seed demo projects if empty
+  if (projects.length === 0) {
+    projects = [
+      {
+        id: Date.now() + 1,
+        title: 'EC2 Auto Scaling with Load Balancer',
+        desc: 'Set up an EC2 auto-scaling group behind an Application Load Balancer to handle variable traffic.',
+        category: 'EC2 / Compute',
+        status: 'Completed',
+        link: 'https://github.com',
+        notes: 'Learned about launch templates, target groups, and health checks.',
+        tags: ['EC2', 'ALB', 'Auto Scaling', 'CloudWatch'],
+        date: '2025-01-15'
+      },
+      {
+        id: Date.now() + 2,
+        title: 'CI/CD Pipeline with CodePipeline',
+        desc: 'Built a full CI/CD pipeline using AWS CodeCommit, CodeBuild, and CodeDeploy.',
+        category: 'CI/CD',
+        status: 'Completed',
+        link: '',
+        notes: 'Faced IAM permission issues during CodeDeploy setup.',
+        tags: ['CodePipeline', 'CodeBuild', 'CodeDeploy', 'S3'],
+        date: '2025-02-01'
+      },
+      {
+        id: Date.now() + 3,
+        title: 'Dockerize Node.js App & Push to ECR',
+        desc: 'Containerized a Node.js REST API, pushed to Elastic Container Registry, deployed on ECS Fargate.',
+        category: 'Docker / K8s',
+        status: 'In Progress',
+        link: 'https://github.com',
+        notes: 'ECS task definition setup still in progress.',
+        tags: ['Docker', 'ECR', 'ECS', 'Fargate'],
+        date: '2025-02-20'
+      }
+    ];
+    save();
+  }
+
+  function save() {
+    localStorage.setItem('devops-projects', JSON.stringify(projects));
+    updateStats();
+    renderProjects();
+  }
+
+  function updateStats() {
+    document.getElementById('total-count').textContent = projects.length;
+    document.getElementById('done-count').textContent = projects.filter(p => p.status === 'Completed').length;
+    document.getElementById('wip-count').textContent = projects.filter(p => p.status === 'In Progress').length;
+  }
+
+  function setFilter(f, el) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    renderProjects();
+  }
+
+  function filterProjects() { renderProjects(); }
+
+  function renderProjects() {
+    const search = document.getElementById('search-input').value.toLowerCase();
+    let filtered = projects.filter(p => {
+      const matchFilter = currentFilter === 'all' || p.status === currentFilter;
+      const matchSearch = !search ||
+        p.title.toLowerCase().includes(search) ||
+        p.desc.toLowerCase().includes(search) ||
+        p.tags.some(t => t.toLowerCase().includes(search));
+      return matchFilter && matchSearch;
+    });
+
+    const grid = document.getElementById('projects-grid');
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">📂</div>
+        <h3>No Projects Yet</h3>
+        <p>Click "+ Add Project" to start documenting your AWS DevOps journey.</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map((p, i) => `
+      <div class="project-card" style="animation-delay:${i * 0.07}s">
+        <div class="card-top">
+          <div class="card-icon">${CATEGORY_ICONS[p.category] || '📦'}</div>
+          <span class="status-badge status-${p.status.toLowerCase().replace(' ', '-')}">${p.status}</span>
+        </div>
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.desc || 'No description provided.'}</div>
+        <div class="card-tags">${p.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
+        <div class="card-footer">
+          <div class="card-date">${p.date || 'No date'}</div>
+          <div class="card-actions">
+            <button class="card-btn" onclick="viewProject(${p.id})">View</button>
+            ${p.link ? `<a class="card-btn" href="${p.link}" target="_blank">GitHub</a>` : ''}
+            <button class="card-btn delete" onclick="deleteProject(${p.id})">Del</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function openModal() {
+    currentTags = [];
+    ['f-title','f-desc','f-link','f-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-category').selectedIndex = 0;
+    document.getElementById('f-status').selectedIndex = 0;
+    document.getElementById('tags-preview').innerHTML = '';
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  function addTag() {
+    const input = document.getElementById('f-tag-input');
+    const val = input.value.trim();
+    if (!val || currentTags.includes(val)) { input.value = ''; return; }
+    currentTags.push(val);
+    input.value = '';
+    renderTagsPreview();
+  }
+
+  function removeTag(tag) {
+    currentTags = currentTags.filter(t => t !== tag);
+    renderTagsPreview();
+  }
+
+  function renderTagsPreview() {
+    document.getElementById('tags-preview').innerHTML = currentTags.map(t =>
+      `<span class="tag-pill">${t}<span class="rm" onclick="removeTag('${t}')">✕</span></span>`
+    ).join('');
+  }
+
+  function saveProject() {
+    const title = document.getElementById('f-title').value.trim();
+    if (!title) { alert('Please enter a project title.'); return; }
+    const project = {
+      id: Date.now(),
+      title,
+      desc: document.getElementById('f-desc').value.trim(),
+      category: document.getElementById('f-category').value,
+      status: document.getElementById('f-status').value,
+      link: document.getElementById('f-link').value.trim(),
+      notes: document.getElementById('f-notes').value.trim(),
+      tags: [...currentTags],
+      date: new Date().toISOString().split('T')[0]
+    };
+    projects.unshift(project);
+    save();
+    closeModal();
+  }
+
+  function deleteProject(id) {
+    if (!confirm('Delete this project?')) return;
+    projects = projects.filter(p => p.id !== id);
+    save();
+  }
+
+  function viewProject(id) {
+    const p = projects.find(p => p.id === id);
+    if (!p) return;
+    document.getElementById('d-title').innerHTML = `${p.title.split(' ').slice(0,2).join(' ')} <span>Details</span>`;
+    document.getElementById('detail-content').innerHTML = `
+      <div class="detail-section">
+        <div class="detail-label">Category</div>
+        <div class="detail-value">${CATEGORY_ICONS[p.category] || '📦'} ${p.category}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Status</div>
+        <div class="detail-value"><span class="status-badge status-${p.status.toLowerCase().replace(' ','-')}">${p.status}</span></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Description</div>
+        <div class="detail-value">${p.desc || '—'}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Key Notes / Learnings</div>
+        <div class="detail-value">${p.notes || '—'}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">AWS Services / Tags</div>
+        <div class="card-tags">${p.tags.map(t => `<span class="card-tag">${t}</span>`).join('') || '—'}</div>
+      </div>
+      ${p.link ? `<div class="detail-section">
+        <div class="detail-label">Project Link</div>
+        <div class="detail-value"><a class="detail-link" href="${p.link}" target="_blank">${p.link}</a></div>
+      </div>` : ''}
+      <div class="detail-section">
+        <div class="detail-label">Date Added</div>
+        <div class="detail-value">${p.date}</div>
+      </div>
+    `;
+    document.getElementById('detail-modal').classList.add('open');
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-modal').classList.remove('open');
+  }
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('open');
+      }
+    });
+  });
+
+  // Init
+  updateStats();
+  renderProjects();
+</script>
+</body>
+</html>
